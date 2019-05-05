@@ -23,7 +23,7 @@ print-usage() {
 # Errors
 INVALID_ARGS=8001
 
-if [ $# <2 ]; then
+if (( $# < 2 )); then
   print-usage
   exit ${INVALID_ARGS}
 fi
@@ -31,7 +31,7 @@ fi
 subId=$1
 pattern=$2
 realRun=0
-if [ $# == 3 ] && [ $3 == 'realrun' ]; then
+if (( $# == 3 )) && [ $3 == 'realrun' ]; then
   realRun=1
 fi
 echo "Delete resource groups matching "${pattern}" in subscription "$subId" 'realrun'=${realRun}"
