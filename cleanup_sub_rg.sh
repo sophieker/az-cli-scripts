@@ -24,7 +24,7 @@ print-usage() {
 # Errors
 INVALID_ARGS=8001
 
-if (($# == 0 )); then
+if (( $# == 0 )); then
   print-usage
   exit ${INVALID_ARGS}
 fi
