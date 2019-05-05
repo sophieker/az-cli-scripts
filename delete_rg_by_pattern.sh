@@ -10,14 +10,13 @@ source ${DIR}/functions.sh
 
 print-usage() {
   echo "
-    This script deletes inactive resource groups on the given subscription.
-    Inactive resource groups are the ones with no non-audit activity in last 7 days.
-    The script takes 3 arguments: Id of the subscription to work on, pattern to apply and/or whether it's a 'realrun'. 
+    This script deletes resource groups whose name matches given pattern on the given subscription.
+    The script takes 3 arguments: Id of the subscription to work on, pattern to match resource group's name for deletion and/or whether it's a 'realrun'. 
     In dryrun mode, resource groups will be examed but not deleted. Any string other than 'realrun' will result in dryrun.
     e.g. 
-    $0 my-test-subscrioption pattern  --> dry run
-    $0 my-test-subscrioption pattern realrun --> real run
-    $0 my-test-subscrioption pattern realrun | tee ./log  --> real run with logs recorded
+    $0 'my-test-subscrioption' 'test-resource-group'  --> dry run
+    $0 'my-test-subscrioption' 'pattern' realrun --> real run
+    $0 'my-test-subscrioption' 'pattern' realrun | tee ./log  --> real run with logs recorded
   "
 }
 
