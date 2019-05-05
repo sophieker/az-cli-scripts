@@ -20,7 +20,7 @@ print-usage() {
 # Errors
 INVALID_ARGS=8001
 
-if [ $# == 0 ]; then
+if (( $# == 0 )); then
   print-usage
   exit ${INVALID_ARGS}
 fi
@@ -28,7 +28,7 @@ fi
 subId=$1
 
 length='7d'
-if [ $# == 2 ]; then
+if (( $# == 2 )); then
   length=$2
 fi
 

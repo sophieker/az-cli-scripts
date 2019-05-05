@@ -24,19 +24,19 @@ print-usage() {
 # Errors
 INVALID_ARGS=8001
 
-if [ $# == 0 ]; then
+if (($# == 0 )); then
   print-usage
   exit ${INVALID_ARGS}
 fi
 
 subId=$1
 realRun=0
-if [ $# == 2 ] && [ $2 == 'realrun' ]; then
+if (( $# == 2 )) && [ $2 == 'realrun' ]; then
   realRun=1
 fi
 echo "Clean up subscription "$subId" 'realrun'=${realRun}"
 
-cmd="az group list --subscription ${subId} --query \"[].{name:name, location:location, managedBy:managedBy, state:properties.provisioningState, tags:tags}\" -o tsv"
+cmd="az group list --subscription ${subId} --query \"[].{name:name, location:location, managedBy:managedBy, state:properties.provisioningState, preserve:tags.preserve}\" -o tsv"
 echo "$cmd"
 rgs=`eval ${cmd}`
 
@@ -48,7 +48,6 @@ do
   #echo ${line}
   #readarray -t -d $'\t' f <<< $line
   IFS=$'\t'  read -r -a f <<< $line
-  #echo ${#f[@]}, ${f[0]}, ${f[1]}, ${f[2]}, ${f[3]}
   echo
   echo "+++++++++++++PROCESS RG: "${f[0]}"+++++++++++++"
   # skip managed rg and rg in Deleting state
@@ -62,8 +61,8 @@ do
   activities="$(get-non-audit-activities ${f[0]} 7d)"
   if [ -z "${activities}" ]; then
     echo "NO NON-AUDIT ACTIVITIES IN LAST 7 DAYS. SHOULD DELETE: "${f[0]}
-    if [ ${#f[@]} == 5 ] && [ ${f[4]} != 'None' ]; then
-      echo "FOUND TAGS: "${f[4]}" ON RG: "${f[0]}" SKIP DELETE"
+    if [ ${f[4]} != 'None' ]; then
+      echo "SKIP PRESERVED RG: "${f[0]}
     else
       cmd="time az group delete --no-wait -y --subscription ${subId} -n ${f[0]}"
       echo $cmd
