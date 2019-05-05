@@ -15,9 +15,9 @@ print-usage() {
     The script takes 2 arguments: Id of the subscription to work on and/or whether it's a 'realrun'. 
     In dryrun mode, resource groups will be examed but not deleted. Any string other than 'realrun' will result in dryrun.
     e.g. 
-    $0 my-test-rg-eastus  --> dry run
-    $0 my-test-rg-eastus realrun --> real run
-    $0 my-test-rg-eastus realrun | tee ./log  --> real run with logs recorded
+    $0 my-test-subscrioption  --> dry run
+    $0 my-test-subscrioption realrun --> real run
+    $0 my-test-subscrioption realrun | tee ./log  --> real run with logs recorded
   "
 }
 
