@@ -36,12 +36,12 @@ if (( $# == 2 )) && [ $2 == 'realrun' ]; then
 fi
 echo "Clean up subscription "$subId" 'realrun'=${realRun}"
 
-cmd="az group list --subscription ${subId} --query \"[].{name:name, location:location, managedBy:managedBy, state:properties.provisioningState, preserve:tags.preserve}\" -o tsv"
+cmd="az group list --subscription '${subId}' --query \"[].{name:name, location:location, managedBy:managedBy, state:properties.provisioningState, preserve:tags.preserve}\" -o tsv"
 echo "$cmd"
 rgs=`eval ${cmd}`
 
 rgCnt=$(echo "$rgs" | wc -l)
-echo "FOUND "${rgCnt}" RESOURCE GROUPS IN SUBSCRIPTION "${subId}
+echo "FOUND "${rgCnt}" RESOURCE GROUPS IN SUBSCRIPTION '${subId}'"
 
 for line in ${rgs}
 do
@@ -49,29 +49,29 @@ do
   #readarray -t -d $'\t' f <<< $line
   IFS=$'\t'  read -r -a f <<< $line
   echo
-  echo "+++++++++++++PROCESS RG: "${f[0]}"+++++++++++++"
+  echo "+++++++++++++PROCESS RG: ${f[0]} +++++++++++++"
   # skip managed rg and rg in Deleting state
   if [ ${f[2]} != 'None' ]; then
-    echo "SKIP MANAGED RG: "${f[0]}" IS MANAGED BY "${f[2]}
+    echo "SKIP MANAGED RG: ${f[0]} IS MANAGED BY ${f[2]}"
     continue
   elif [ ${f[3]} == 'Deleting' ]; then
-    echo "SKIP RG UNDER DELETION: "${f[0]}
+    echo "SKIP RG UNDER DELETION: ${f[0]}"
     continue
   fi
-  activities="$(get-non-audit-activities ${f[0]} 7d)"
+  activities="$(get-non-audit-activities $subId ${f[0]} 7d)"
   if [ -z "${activities}" ]; then
-    echo "NO NON-AUDIT ACTIVITIES IN LAST 7 DAYS. SHOULD DELETE: "${f[0]}
+    echo "NO NON-AUDIT ACTIVITIES IN LAST 7 DAYS. SHOULD DELETE: ${f[0]}"
     if [ ${f[4]} != 'None' ]; then
-      echo "SKIP PRESERVED RG: "${f[0]}
+      echo "SKIP PRESERVED RG: ${f[0]}"
     else
-      cmd="time az group delete --no-wait -y --subscription ${subId} -n ${f[0]}"
+      cmd="time az group delete --no-wait -y --subscription '${subId}' -n '${f[0]}'"
       echo $cmd
       if [ $realRun == 1 ]; then
         eval $cmd
       fi
     fi
   else
-    echo "ACTIVITY DETECTED ON RG: "${f[0]}
+    echo "ACTIVITY DETECTED ON RG: ${f[0]}"
     echo "${activities}"
   fi
 done 
