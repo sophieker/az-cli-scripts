@@ -28,5 +28,6 @@ vendor/
 # log files
 log
 log.*
+*.log
 
 .DS_Store
