@@ -34,7 +34,7 @@ realRun=0
 if (( $# == 2 )) && [ $2 == 'realrun' ]; then
   realRun=1
 fi
-echo "Clean up subscription "$subId" 'realrun'=${realRun}"
+echo "Clean up subscription '$subId' 'realrun'=${realRun}"
 
 cmd="az group list --subscription '${subId}' --query \"[].{name:name, location:location, managedBy:managedBy, state:properties.provisioningState, preserve:tags.preserve}\" -o tsv"
 echo "$cmd"
