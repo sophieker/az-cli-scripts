@@ -67,7 +67,7 @@ do
       cmd="time az group delete --no-wait -y --subscription '${subId}' -n '${f[0]}'"
       echo $cmd
       if [ $realRun == 1 ]; then
-        eval $cmd
+        eval $cmd || : # Do not exit on error on deletion
       fi
     fi
   else
