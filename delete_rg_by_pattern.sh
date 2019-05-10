@@ -32,10 +32,10 @@ subId=$1
 pattern=$2
 length=$3
 realRun=0
-if (( $# == 3 )) && [ $3 == 'realrun' ]; then
+if (( $# == 4 )) && [ $4 == 'realrun' ]; then
   realRun=1
 fi
-echo "Delete resource groups matching '${pattern}' in subscription '${subId}' 'realrun'=${realRun}"
+echo "Delete resource groups with no activity in last '${length}' matching '${pattern}' in subscription '${subId}' 'realrun'=${realRun}"
 
 cmd="az group list --subscription '${subId}' --query \"[?contains(name, '$pattern')].{name:name, location:location, managedBy:managedBy, state:properties.provisioningState, preserve:tags.preserve}\" -o tsv"
 echo "$cmd"
