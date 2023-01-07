@@ -40,3 +40,20 @@ Command group 'acr manifest' is in preview and under development. Reference and 
 
 2. Kubernetes service related
 deployment yaml file is checked in separately
+# Apply change and redeploy
+$ k apply -f gpt-detector.deploy.yaml
+
+# Check pod deployment status
+$ k get po -ngpt-detector -o wide
+
+# Check pod logs
+$ k logs <pod name from above> -ngpt-detector
+
+# Port-forward to test locally
+k port-forward <pod name from above> -ngpt-detector 5000:5000
+
+# exec into pod
+k exec -it <pod name from above> -ngpt-detector -- /bin/bash
+
+# ssh onto the node
+k node-shell <node name>
