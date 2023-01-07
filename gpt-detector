@@ -47,7 +47,7 @@ $ k apply -f gpt-detector.deploy.yaml
 $ k get po -ngpt-detector -o wide
 
 # Check pod logs
-$ k logs <pod name from above> -ngpt-detector
+$ k logs <pod name from above> -ngpt-detector --follow
 
 # Port-forward to test locally
 k port-forward <pod name from above> -ngpt-detector 5000:5000
