@@ -1,0 +1,42 @@
+1. ACR related
+# Get access token for Sophie to use the ACR:
+$ az acr token create --name SophieToken --registry gptdetector  --output json --repository gensy/classifier content/write content/read
+
+# Then Sophie tag her image with: registry and repository name
+docker tag gensy gptdetector.azurecr.io/gensy/classifier:01
+
+# Then she pushes image to ACR
+docker push gptdetector.azurecr.io/gensy/classifier:01
+
+# Show repository
+az acr repository show   -n gptdetector --repository gensy/classifier
+
+# Show image
+az acr repository show   -n gptdetector --image gensy/classifier:01
+
+$ az acr manifest list-metadata -r gptdetector -n  gensy/classifier
+Command group 'acr manifest' is in preview and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+[
+  {
+    "architecture": "amd64",
+    "changeableAttributes": {
+      "deleteEnabled": true,
+      "listEnabled": true,
+      "readEnabled": true,
+      "writeEnabled": true
+    },
+    "configMediaType": "application/vnd.docker.container.image.v1+json",
+    "createdTime": "2023-01-06T21:57:39.2681429Z",
+    "digest": "sha256:a6c49eeb7264cd639c146d1176348d5865523b845dafe80e6968fc1bcb4e6af1",
+    "imageSize": 4507466143,
+    "lastUpdateTime": "2023-01-06T21:57:39.2681429Z",
+    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "os": "linux",
+    "tags": [
+      "01"
+    ]
+  }
+]
+
+2. Kubernetes service related
+deployment yaml file is checked in separately
